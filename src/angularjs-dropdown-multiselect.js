@@ -93,7 +93,8 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                     groupBy: $attrs.groupBy || undefined,
                     groupByTextProvider: null,
                     smartButtonMaxItems: 0,
-                    smartButtonTextConverter: angular.noop
+                    smartButtonTextConverter: angular.noop,
+                    deselectReturnsObj: false
                 };
 
                 $scope.texts = {
@@ -271,7 +272,9 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
 
                     if (!dontRemove && exists) {
                         $scope.selectedModel.splice(_.findIndex($scope.selectedModel, findObj), 1);
-                        $scope.externalEvents.onItemDeselect(findObj);
+                        var obj;
+                        $scope.settings.deselectReturnsObj ? obj = finalObj : obj = findObj;
+                        $scope.externalEvents.onItemDeselect(obj);
                     } else if (!exists && ($scope.settings.selectionLimit === 0 || $scope.selectedModel.length < $scope.settings.selectionLimit)) {
                         $scope.selectedModel.push(finalObj);
                         $scope.externalEvents.onItemSelect(finalObj);
