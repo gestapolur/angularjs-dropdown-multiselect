@@ -22,10 +22,10 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
 
                 var template = '<div class="multiselect-parent btn-group dropdown-multiselect">';
                 template += '<button type="button" class="dropdown-toggle" ng-class="settings.buttonClasses" ng-click="toggleDropdown()">{{getButtonText()}}&nbsp;<span class="caret"></span></button>';
-                template += '<ul class="dropdown-menu dropdown-menu-form" ng-style="{display: open ? \'block\' : \'none\', height : settings.scrollable ? settings.scrollableHeight : \'auto\', overflow : settings.scrollable ? \'scroll\' : \'visible\'}" >';
-                template += '<li ng-hide="!settings.showCheckAll || settings.selectionLimit > 0"><a data-ng-click="selectAll()"><span class="glyphicon glyphicon-ok"></span>  {{texts.checkAll}}</a>';
-                template += '<li ng-show="settings.showUncheckAll"><a data-ng-click="deselectAll();"><span class="glyphicon glyphicon-remove"></span>   {{texts.uncheckAll}}</a></li>';
-                template += '<li ng-hide="(!settings.showCheckAll || settings.selectionLimit > 0) && !settings.showUncheckAll" class="divider"></li>';
+                template += '<ul class="dropdown-menu dropdown-menu-form" ng-style="{display: open ? \'block\' : \'none\', height : settings.scrollable ? settings.scrollableHeight : \'auto\', \'overflow-y\' : settings.scrollable ? \'scroll\' : \'visible\', \'overflow-x\': \'hidden\' }" >';
+                template += '<li ng-hide="!settings.showCheckAll || settings.selectionLimit > 0"><a data-ng-click="selectAll()" class="dropdown-action"><span class="glyphicon glyphicon-ok"></span>  {{texts.checkAll}}</a>';
+                template += '<li ng-show="settings.showUncheckAll"><a data-ng-click="deselectAll();" class="dropdown-action"><span class="glyphicon glyphicon-remove"></span>   {{texts.uncheckAll}}</a></li>';
+                template += '<li ng-hide="(!settings.showCheckAll || settings.selectionLimit > 0) && !settings.showUncheckAll" class="divider" class="dropdown-action"></li>';
                 template += '<li ng-show="settings.enableSearch"><div class="dropdown-header"><input type="text" class="form-control" style="width: 100%;" ng-model="searchFilter" placeholder="{{texts.searchPlaceholder}}" /></li>';
                 template += '<li ng-show="settings.enableSearch" class="divider"></li>';
 
@@ -41,7 +41,7 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                 if (checkboxes) {
                     template += '<div class="checkbox"><label><input class="checkboxInput" type="checkbox" ng-click="checkboxClick($event, getPropertyForObject(option,settings.idProp))" ng-checked="isChecked(getPropertyForObject(option,settings.idProp))" /> {{getPropertyForObject(option, settings.displayProp)}}</label></div></a>';
                 } else {
-                    template += '<span data-ng-class="{\'glyphicon glyphicon-ok\': isChecked(getPropertyForObject(option,settings.idProp))}"></span> {{getPropertyForObject(option, settings.displayProp)}}</a>';
+                    template += '<span data-ng-class="isChecked(getPropertyForObject(option,settings.idProp)) ? \'glyphicon glyphicon-ok\' : \'glyphicon glyphicon-spacechar\'"></span> {{getPropertyForObject(option, settings.displayProp)}}</a>';
                 }
 
                 template += '</li>';
@@ -56,7 +56,7 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
             },
             link: function ($scope, $element, $attrs) {
                 var $dropdownTrigger = $element.children()[0];
-                
+
                 $scope.toggleDropdown = function () {
                     $scope.open = !$scope.open;
                 };
@@ -184,11 +184,16 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                             angular.forEach($scope.options, function (optionItem) {
                                 if ($scope.isChecked($scope.getPropertyForObject(optionItem, $scope.settings.idProp))) {
                                     var displayText = $scope.getPropertyForObject(optionItem, $scope.settings.displayProp);
-                                    var converterResponse = $scope.settings.smartButtonTextConverter(displayText, optionItem);
+                                    var converterResponse = $scope.settings.smartButtonTextConverter(displayText, optionItem, $scope.selectedModel.length, itemsText.join(',').length );
 
                                     itemsText.push(converterResponse ? converterResponse : displayText);
                                 }
                             });
+
+                            if ( $scope.options.length === $scope.selectedModel.length ) {
+                               itemsText = "All";
+                               return itemsText;
+                            }
 
                             if ($scope.selectedModel.length > $scope.settings.smartButtonMaxItems) {
                                 itemsText = itemsText.slice(0, $scope.settings.smartButtonMaxItems);
@@ -261,7 +266,6 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                         clearObject($scope.selectedModel);
                         angular.extend($scope.selectedModel, finalObj);
                         $scope.externalEvents.onItemSelect(finalObj);
-                        if ($scope.settings.closeOnSelect) $scope.open = false;
 
                         return;
                     }
@@ -277,7 +281,6 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                         $scope.selectedModel.push(finalObj);
                         $scope.externalEvents.onItemSelect(finalObj);
                     }
-                    if ($scope.settings.closeOnSelect) $scope.open = false;
                 };
 
                 $scope.isChecked = function (id) {
