@@ -1,9 +1,9 @@
-'use strict';
 
 var directiveModule = angular.module('angularjs-dropdown-multiselect', []);
 
 directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$compile', '$parse',
-    function ($filter, $document, $compile, $parse) {
+    function($filter, $document, $compile, $parse) {
+        'use strict';
 
         return {
             restrict: 'AE',
@@ -39,9 +39,9 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                 template += '<a role="menuitem" tabindex="-1" ng-click="setSelectedItem(getPropertyForObject(option,settings.idProp))">';
 
                 if (checkboxes) {
-                    template += '<div class="checkbox"><label><input class="checkboxInput" type="checkbox" ng-click="checkboxClick($event, getPropertyForObject(option,settings.idProp))" ng-checked="isChecked(getPropertyForObject(option,settings.idProp))" /> {{getPropertyForObject(option, settings.displayProp)}}</label></div></a>';
+                    template += '<span class="glyphicon glyphicon-ok" ng-style="isChecked(getPropertyForObject(option,settings.idProp)) ? \'\' : {\'color\': \'transparent\'} "></span> {{getPropertyForObject(option, settings.displayProp)}}</a>';
                 } else {
-                    template += '<span data-ng-class="isChecked(getPropertyForObject(option,settings.idProp)) ? \'glyphicon glyphicon-ok\' : \'glyphicon glyphicon-spacechar\'"></span> {{getPropertyForObject(option, settings.displayProp)}}</a>';
+                    template += '<span data-ng-class="{\'glyphicon glyphicon-ok\': isChecked(getPropertyForObject(option,settings.idProp))}"></span> {{getPropertyForObject(option, settings.displayProp)}}</a>';
                 }
 
                 template += '</li>';
