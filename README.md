@@ -21,16 +21,16 @@ NOTE: I am currently working on a v2 of this directive with performance imporovm
 http://dotansimha.github.io/angularjs-dropdown-multiselect/
 
 ## Dependencies
-- required: AngularJS >= 1.2, Lodash >= 2, Bootstrap >= 3.0
+- required: AngularJS >= 1.4, Lodash >= 3, Bootstrap >= 3.0
 
-- Make sure to add the dependencies before the directive's js file. 
+- Make sure to add the dependencies before the directive's js file.
 - Note: Bootstrap JS file is not needed for the directive, it just uses the CSS file.
 - **Note: Make sure to add lodash.js to your project, and make sure you use the regulate version of Lodash (NOT lodash.underscore or lodash.compat**
 
 ## Install
 1. Download the files
-	1. Using bower: <img src="http://benschwarz.github.io/bower-badges/badge@2x.png" width="130" height="30"> 
-	
+	1. Using bower: <img src="http://benschwarz.github.io/bower-badges/badge@2x.png" width="130" height="30">
+
 		Just run `bower install angularjs-dropdown-multiselect`
 	2. Manually:
 		You can download the `.js` file directly or clone this repository.
