@@ -1,9 +1,9 @@
+'use strict';
 
 var directiveModule = angular.module('angularjs-dropdown-multiselect', []);
 
 directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$compile', '$parse',
     function($filter, $document, $compile, $parse) {
-        'use strict';
 
         return {
             restrict: 'AE',
