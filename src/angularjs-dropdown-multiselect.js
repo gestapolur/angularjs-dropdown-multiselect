@@ -103,7 +103,8 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                     selectionOf: '/',
                     searchPlaceholder: 'Search...',
                     buttonDefaultText: 'Select',
-                    dynamicButtonTextSuffix: 'checked'
+                    dynamicButtonTextSuffix: 'checked',
+                    checkAllButtonText: 'All'
                 };
 
                 $scope.searchFilter = $scope.searchFilter || '';
@@ -191,7 +192,7 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                             });
 
                             if ( $scope.options.length === $scope.selectedModel.length ) {
-                               itemsText = "All";
+                               itemsText = $scope.texts.checkAllButtonText;
                                return itemsText;
                             }
 
