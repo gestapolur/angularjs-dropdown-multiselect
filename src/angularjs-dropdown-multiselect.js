@@ -66,13 +66,26 @@ directiveModule.directive('ngDropdownMultiselect', ['$filter', '$document', '$co
                     $event.stopImmediatePropagation();
                 };
 
+		$(document).bind('click', function($event){
+			var isChild = $element.find($event.target).length > 0;
+			var isSelf = $element[0] == $event.target;
+			var isInside = isChild || isSelf;
+			if (!isInside) {
+				$scope.$apply(function() {
+					$scope.externalEvents.onCloseSelect();
+					$scope.open = false;
+				});
+			}
+		});
+
                 $scope.externalEvents = {
                     onItemSelect: angular.noop,
                     onItemDeselect: angular.noop,
                     onSelectAll: angular.noop,
                     onDeselectAll: angular.noop,
                     onInitDone: angular.noop,
-                    onMaxSelectionReached: angular.noop
+                    onMaxSelectionReached: angular.noop,
+		    onCloseSelect: angular.noop
                 };
 
                 $scope.settings = {
